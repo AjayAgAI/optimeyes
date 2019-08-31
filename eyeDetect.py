@@ -342,7 +342,7 @@ def phiTest(cx,cy,gradDX,gradDY,gradXcoords,gradYcoords):
 # defaultPriorValue - if not all of newProb is covered by priorToMultiply, this scalar goes in the uncovered areas.
 def multiplyProbImages(newProb, priorToMultiply, YXoffsetOfSecondWithinFirst, defaultPriorValue):
     if np.any(YXoffsetOfSecondWithinFirst > newProb.shape) or np.any(-YXoffsetOfSecondWithinFirst > priorToMultiply.shape):
-        print "multiplyProbImages aborting - zero overlap. Offset and matrices:"
+        print("multiplyProbImages aborting - zero overlap. Offset and matrices:")
         print YXoffsetOfSecondWithinFirst
         print newProb.shape
         print priorToMultiply.shape

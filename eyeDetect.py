@@ -343,9 +343,9 @@ def phiTest(cx,cy,gradDX,gradDY,gradXcoords,gradYcoords):
 def multiplyProbImages(newProb, priorToMultiply, YXoffsetOfSecondWithinFirst, defaultPriorValue):
     if np.any(YXoffsetOfSecondWithinFirst > newProb.shape) or np.any(-YXoffsetOfSecondWithinFirst > priorToMultiply.shape):
         print("multiplyProbImages aborting - zero overlap. Offset and matrices:")
-        print YXoffsetOfSecondWithinFirst
-        print newProb.shape
-        print priorToMultiply.shape
+        print(YXoffsetOfSecondWithinFirst)
+        print(newProb.shape)
+        print(priorToMultiply.shape)
         return newProb*defaultPriorValue
     prior = np.ones(newProb.shape)*defaultPriorValue # Most of this will get overwritten. For areas that won't be, with fill with default value.
     #offsets
@@ -358,7 +358,7 @@ def multiplyProbImages(newProb, priorToMultiply, YXoffsetOfSecondWithinFirst, de
         # NOT THIS: x[1:2][1:2]
         # THIS: x[1:2,1:2]
         offset = int(round(YXoffsetOfSecondWithinFirst[i])) # how much to offset 'prior' within 'newProb', for the current dimension
-        print offset
+        print(offset)
         if offset >= 0: # prior goes right of 'newProb', in the world. So prior will be copied into newProb at a positive offset
             startPrior[i] = 0 #index within prior
             endPrior[i] = min(priorToMultiply.shape[i],newProb.shape[i]-offset) #how much of prior to copy
@@ -535,7 +535,7 @@ def getOffset(frame, allowDebugDisplay=True, trackAverageOffset=True, directInfe
                         betweenEyes = (np.array(featureCenterXY(leftEye_rightEye[0]))+np.array(featureCenterXY(leftEye_rightEye[1])))/2
                         virtualpoint = ClassyVirtualReferencePoint.ClassyVirtualReferencePoint(haystackKeypoints, haystackDescriptors, (betweenEyes[0], betweenEyes[1]), face, leftEye_rightEye[0], leftEye_rightEye[1])
                     else:
-                        print "begin fail"
+                        print("begin fail")
                 else: #we've already created it
                     keypoints, descriptors = detector.detectAndCompute(gray, mask=None)
                     if drawKeypoints:
@@ -601,7 +601,7 @@ class LinearLeastSquaresModel:
         return err_per_point
 
 def getFeatures(XYOffsets, quadratic = True):
-##    print XYOffsets
+##    print(XYOffsets)
     if len(XYOffsets.shape)==1:
         numRows=1
         XYOffsets.shape = (numRows,XYOffsets.shape[0])
@@ -684,7 +684,7 @@ def mainForTraining():
                     #print( (xOffset,yOffset) )
                     #do learning here, to relate xOffset and yOffset to screenX,screenY
                     crosshair.record(pupilOffsetXYList)
-                    print "recorded something"
+                    print("recorded something")
                     crosshair.remove()
                     recordedEvents += 1
                     if recordedEvents > RANSAC_MIN_INLIERS:
@@ -693,23 +693,23 @@ def mainForTraining():
                         features = getFeatures(resultXYpxpy[:,:-2])
                         featuresAndLabels = np.concatenate( (features, resultXYpxpy[:,-2:] ) , axis=1)
                         HT = RANSACFitTransformation(featuresAndLabels)
-                        print HT
+                        print(HT)
                 if HT is not None: # draw predicted eye position
                     currentFeatures =getFeatures( np.array( (pupilOffsetXYList[0], pupilOffsetXYList[1]) ))
                     gazeCoords = currentFeatures.dot(HT)
                     crosshair.drawCrossAt( (gazeCoords[0,0], gazeCoords[0,1]) )
             readSuccessful, frame = vc.read()
     
-        print "writing"
+        print("writing")
         crosshair.write() #writes data to a csv for MATLAB
         crosshair.close()
-        print "HT:\n"
-        print HT
+        print("HT:\n")
+        print(HT)
         resultXYpxpy =np.array(crosshair.result)
-        print "eyeData:\n"
-        print getFeatures(resultXYpxpy[:,:-2])
-        print "resultXYpxpy:\n"
-        print resultXYpxpy[:,-2:]
+        print("eyeData:\n")
+        print(getFeatures(resultXYpxpy[:,:-2]))
+        print("resultXYpxpy:\n")
+        print(resultXYpxpy[:,-2:])
     finally:
         vc.release() #close the camera
     
